@@ -1,13 +1,14 @@
 @echo off
 setlocal enabledelayedexpansion
 
-for /f %%i in ('pm2 id discord-bot 2^>nul') do set BOT_ID=%%i
-if "!BOT_ID!"=="-1" (
+for /f "delims=[] " %%i in ('pm2 id discord-bot 2^>nul') do set BOT_ID=%%i
+if "!BOT_ID!"=="" (
     echo Bot not running. Starting...
-    pm2 start index.js -i 1 --name discord-bot
+    start "" /min cmd /c "pm2 start index.js -i 1 --name discord-bot >nul 2>&1"
 ) else (
     echo Bot already running, skipping startup.
 )
+start "" cmd /k "pm2 logs discord-bot"
 
 :loop
 timeout /t 900 >nul
