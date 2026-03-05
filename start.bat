@@ -1,15 +1,16 @@
 @echo off
 setlocal enabledelayedexpansion
 
-pm2 describe discord-bot >nul 2>&1
-if errorlevel 1 (
+for /f %%i in ('pm2 id discord-bot 2^>nul') do set BOT_ID=%%i
+if "!BOT_ID!"=="-1" (
+    echo Bot not running. Starting...
     pm2 start index.js -i 1 --name discord-bot
 ) else (
-    echo Bot already running.
+    echo Bot already running, skipping startup.
 )
 
 :loop
-timeout /t 1800 >nul
+timeout /t 30 >nul
 
 git fetch origin main >nul 2>&1
 for /f %%i in ('git rev-parse HEAD') do set LOCAL=%%i
@@ -21,6 +22,8 @@ if not "!LOCAL!"=="!REMOTE!" (
     
     echo Reloading bot...
     pm2 reload discord-bot
+) else (
+    echo Bot is up to date
 )
 
 goto loop
