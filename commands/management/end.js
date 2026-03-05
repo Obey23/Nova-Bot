@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -17,31 +17,37 @@ function prettyTime(ms, compress = false) {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('botinfo')
-        .setDescription('Displays information and stats about the bot'),
+        .setName('end')
+        .setDescription('Logs out and shuts down the bot')
+        .addBooleanOption(option => option
+            .setName('force')
+            .setDescription('If true, the bot\'s auto restart script will not execute')
+            .setRequired(false)
+        ),
     async execute(interaction) {
         try {
             const serversPath = path.join(__dirname, '../../');
             const configPath = serversPath + 'config.json';
             const botConfig = JSON.parse(fs.readFileSync(configPath || {}));
-            const now = new Date();
-            const memUsage = process.memoryUsage()
-            await interaction.client.guilds.fetch({ limit: 200 });
-
-            await interaction.reply({ embeds: [new EmbedBuilder()
-                .setTitle(botConfig.botEmoji + ' ' + botConfig.botName)
-                .setDescription('Uses application (`/`) commands')
-                .addFields(
-                    { name: '🖥️ Servers', value: interaction.client.guilds.cache.size.toString() || '0', inline: true },
-                    { name: '📱 Users', value: interaction.client.users.cache.size.toString() || '0', inline: true },
-                    { name: '📖 Library', value: '[Discord.js](https://discord.js.org)', inline: true },
-                    { name: '💽 Memory Usage', value: (Math.round(memUsage.heapUsed / 1024 / 1024 * 100) / 100).toString() + ' MB', inline: true },
-                    { name: '🏓 Ping', value: 'Latency is ' + (now - interaction.createdTimestamp) + 'ms\nAPI Latency is ' + interaction.client.ws.ping + 'ms', inline: true },
-                    { name: '⬆️ Uptime', value: prettyTime(process.uptime() * 1000, true) || 'N/A', inline: true }
-                )
-                .setColor(0xac4af7)
-                .setFooter({ text: 'Made by Jessica ♡' })
-            ]});
+            if (botConfig['managementIds'].includes(interaction.user.id)) {
+                const force = await interaction.options.getBoolean('force', false) || false;
+                await interaction.reply({ embeds: [ new EmbedBuilder()
+                    .setTitle('🤖 Shutdown')
+                    .setDescription('Shutting down, bye bye')
+                    .addFields(
+                        { name: 'Uptime', value: prettyTime(process.uptime() * 1000, true) }
+                    )
+                    .setColor(0xac4af7)
+                ] });
+                await interaction.client.destroy();
+                process.exit((force) ? 0 : 1);
+            } else {
+                await interaction.reply({ embeds: [ new EmbedBuilder()
+                    .setTitle('🤖 Shutdown')
+                    .setDescription('Only specific permitted users are able to run this command!')
+                    .setColor(0xac4af7)
+                ], flags: MessageFlags.Ephemeral});
+            }
         } catch (error) { console.log(error); }
     }
 }

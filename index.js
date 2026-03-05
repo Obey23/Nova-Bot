@@ -43,6 +43,18 @@ for (const file of eventFiles) {
     }
 }
 
+process.on("SIGINT", async () => {
+    console.log("Shutting down gracefully...");
+    await client.destroy();
+    process.exit(0);
+});
+
+process.on("SIGTERM", async () => {
+    console.log("Shutting down gracefully...");
+    await client.destroy();
+    process.exit(0);
+});
+
 client.login(process.env.token);
 
 (async () => {
