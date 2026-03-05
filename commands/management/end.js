@@ -26,8 +26,8 @@ module.exports = {
         ),
     async execute(interaction) {
         try {
-            const serversPath = path.join(__dirname, '../../');
-            const configPath = serversPath + 'config.json';
+            const root = path.join(__dirname, '../../');
+            const configPath = root + 'config.json';
             const botConfig = JSON.parse(fs.readFileSync(configPath || {}));
             if (botConfig['managementIds'].includes(interaction.user.id)) {
                 const force = await interaction.options.getBoolean('force', false) || false;
@@ -37,7 +37,7 @@ module.exports = {
                     .addFields(
                         { name: 'Uptime', value: prettyTime(process.uptime() * 1000, true) }
                     )
-                    .setColor(0xac4af7)
+                    .setColor(0xffffff)
                 ] });
                 await interaction.client.destroy();
                 process.exit((force) ? 0 : 1);
@@ -45,7 +45,7 @@ module.exports = {
                 await interaction.reply({ embeds: [ new EmbedBuilder()
                     .setTitle('🤖 Shutdown')
                     .setDescription('Only specific permitted users are able to run this command!')
-                    .setColor(0xac4af7)
+                    .setColor(0xffffff)
                 ], flags: MessageFlags.Ephemeral});
             }
         } catch (error) { console.log(error); }

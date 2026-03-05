@@ -39,7 +39,7 @@ module.exports = {
                     { name: '🏓 Ping', value: 'Latency is ' + (now - interaction.createdTimestamp) + 'ms\nAPI Latency is ' + interaction.client.ws.ping + 'ms', inline: true },
                     { name: '⬆️ Uptime', value: prettyTime(process.uptime() * 1000, true) || 'N/A', inline: true }
                 )
-                .setColor(0xac4af7)
+                .setColor(0xffffff)
                 .setFooter({ text: 'Made by Jessica ♡' })
             ]});
         } catch (error) { console.log(error); }
