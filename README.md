@@ -11,13 +11,22 @@ A Discord bot made to be ran remotely on a windows machine and auto update from 
 ## Installation
 - Step 1: Make sure you have the Dependencies
 - Step 2: Clone the repo by running `git clone https://github.com/Obey23/Celeste-Bot.git` in command prompt
-- Step 3: Run `npm i` in command prompt
-- Step 4: Create `.env` file in your directory with the contents:
+- Step 3: Create `.env` file in your directory with the contents:
   ```dosini
   token=YOUR_BOT_TOKEN
   clientId=YOUR_CLIENT_ID
   guildId=YOUR_SERVER_ID
   ```
   of course replacing each value with your bot's respective token and client id
-- Step 5: Edit `config.json` values to match your own server categories/roles/etc.
-- Step 6: Run `start.bat` to start up the bot
+- Step 4: Create `config.json` file in your directory with the contents:
+  ```json
+  {
+    "botEmoji": "YOUR_BOT_EMOJI_SYMBOL",
+    "botName": "YOUR_BOT_NAME",
+    "managementIds": [
+      "YOUR_USER_ID"
+    ],
+  }
+  ```
+  of course replacing each value with your bot's respective emoji (like 😊), name and your user id
+- Step 5: Run `start.bat` to start up the bot
