@@ -5,7 +5,7 @@ const path = require('node:path');
 const { Client, Collection, GatewayIntentBits, Routes } = require('discord.js');
 
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions],
 });
 
 client.commands = new Collection();
@@ -42,12 +42,6 @@ for (const file of eventFiles) {
         client.on(event.name, (...args) => event.execute(...args));
     }
 }
-
-process.on("SIGINT", async () => {
-    console.log("Shutting down gracefully...");
-    await client.destroy();
-    process.exit(0);
-});
 
 process.on("SIGTERM", async () => {
     console.log("Shutting down gracefully...");
