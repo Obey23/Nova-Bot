@@ -20,7 +20,7 @@ if not "!LOCAL!"=="!REMOTE!" (
     git pull origin main
     
     echo Updating Packages...
-    npm i
+    start "" /min cmd /c "npm i >nul 2>&1"
 )
 if not "!RESTART!" EQU "true" goto startup
 echo Restarting in 3 seconds...
