@@ -197,7 +197,7 @@ module.exports = {
                 }
             } else {
                 await interaction.reply({ embeds: [ new EmbedBuilder()
-                    .setTitle('🤖 Shutdown')
+                    .setTitle('Setup')
                     .setDescription('Only specific permitted users are able to run this command!')
                     .setColor(0xffffff)
                 ], flags: MessageFlags.Ephemeral});
